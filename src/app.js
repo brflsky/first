@@ -1,35 +1,99 @@
-console.log('app.js is running');
+class IndecisionApp extends React.Component {
+  render() {
+    const title = 'Indecision';
+    const subtitle = 'Put your life in the hands of cumputer!';
+    const options = ['One', 'Two', 'Five'];
 
-const multiplier = {
-  numbers: [1,5,10],
-  multiplyBy: 5,
-  multiply() {
-    return this.numbers.map(number => number * this.multiplyBy);
+    return (
+      <div>
+        <Header title={title} subtitle={subtitle}/>
+        <Action />
+        <Options options={options}/>
+        <AddOption />
+      </div>
+    );
   }
 }
 
-console.log(multiplier.multiply());
+class Header extends React.Component {
+  render() {
+    return (
+      <div>
+        <h1>{this.props.title}</h1>
+        <h2>{this.props.subtitle}</h2>
+      </div>
+    );
+  }
+};
 
-
-const template = <div><p> InDecision App - one more </p> <p> paragraph</p></div>;
-
-const user = {
-  name: 'Marek',
-  age: 23,
-  location: 'Hamburg'
+class Action extends React.Component {
+  onActionHandler () {
+    alert('OnActionHandler');
+  }
+  render() {
+    return (
+      <div>
+        <button onClick={this.onActionHandler}>What should we do</button>
+      </div>
+    );
+  }
 }
-function getLocation (location) {
-  if (location) return <p>Location: {location} </p>;
+
+class Options extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handlerRemoveAll = this.handlerRemoveAll.bind(this);
+  }
+
+  handlerRemoveAll() {
+    //alert('OnRemoveAllHandler');
+    console.log(this.props.options);
+  }
+  render() {
+    return (
+      <div>
+        {
+          this.props.options.map((option) => <Option key={option} option={option} />)
+        }
+        <button onClick={this.handlerRemoveAll}>RemoveAll</button>
+      </div>
+    );
+
+  }
 }
-const templateTwo = (
-  <div>
-    <h1>{user.name ? user.name : 'Anonymous'}</h1>
-    {(user.age && user.age >= 18) && <p>User age: {user.age}</p>}
-    {getLocation(user.location)}
-  </div>
-);
 
-const appRoot = document.getElementById('app');
+class Option extends React.Component {
+  render() {
+    return (
+      <div>
+        {this.props.option}
+      </div>
+    );
+  }
+}
+
+class AddOption extends React.Component {
+
+  handlerSubmit (e) {
+    e.preventDefault();
+    if (e.target.elements.actionName.value.trim()) {
+      alert(e.target.elements.actionName.value)
+    }
+    e.target.elements.actionName.value = '';
+  }
+
+  render() {
+    return (
+      <div>
+        <form onSubmit={this.handlerSubmit} >
+          <input type="text" name="actionName" />
+          <button >Add action</button>
+        </form>
+      </div>
+    );
+  }
+}
 
 
-ReactDOM.render(templateTwo, appRoot);
+
+ReactDOM.render(<IndecisionApp />, document.getElementById('app'));
