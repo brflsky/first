@@ -8,6 +8,26 @@ class Counter extends React.Component {
       count: 0
     }
   }
+
+  componentDidMount() {
+    try {
+      const json = localStorage.getItem('count');
+      const count = parseInt(JSON.parse(json),10);
+      console.log(count);
+      if(!isNaN(count))
+        this.setState(()=>({count}));
+    } catch (e) {
+  
+    }
+
+  }
+
+  componentDidUpdate(prevProsps, prevState) {
+    if (prevState.count === this.state.count) return;
+    const json = JSON.stringify(this.state.count);
+    localStorage.setItem('count',json)
+  }
+
   handlerIncrement () {
     this.setState(prevState => ({count: prevState.count + 1}));
   };
@@ -34,6 +54,8 @@ class Counter extends React.Component {
     );
   }
 }
+
+
 
 ReactDOM.render(<Counter />, document.getElementById('app'));
 
